@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: frontend-conf
+  namespace: drbt-centralizer-business
+  labels:
+    app: drbt-centralizer-business-app
+data:
+  config.js: |
+    window.globalConfig = {
+      title: '',
+      cookieExpires: 7,
+      useI18n: true,
+      baseUrl: {
+        // dev: 'http://192.168.20.233:31639/',
+        dev: 'http://192.168.70.133:8888/',
+        pro: 'http://192.168.20.233:31639/'
+      },
+      homeName: 'home',
+      plugin: {
+        'error-store': {
+          showInHeader: true, // 设为false后不会在顶部显示错误日志徽标
+          developmentOff: true // 设为true后在开发环境不会收集错误信息，方便开发中排查错误
+        }
+      },
+      windowConfig: 'app-v3',
+      pageSizeList: [5, 20, 50, 100, 500, 1000],
+      pageSizeDefault: 20,
+      pageConfig: {
+        page_num: 1,
+        page_size: 20,
+        sidx: '', // 排序列
+        sord: 'desc', // 排序类型  ASC   asc desc
+          records: 0, // 总记录数
+          total: 0 //  总页数
+      }
+    }
+

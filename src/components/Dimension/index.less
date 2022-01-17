@@ -1,0 +1,29 @@
+@import '/src/styles/base.less';
+
+.middlefixbox {
+  position: fixed;
+  left: 0;
+  top: 40%;
+  z-index: 99;
+  opacity: 0.8;
+  font-size: 14px;
+  color: white;
+  height: 220px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  .middleitem {
+    padding: 0 10px 0 0;
+    min-width: 100px;
+    height: 40px;
+    margin-bottom: 10px;
+    font-size: 22px;
+    color: white;
+    text-align: center;
+    line-height: 45px;
+    background: linear-gradient(to right, @bgcolor 0%, rgb(200, 237, 252) 100%);
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+  }
+}

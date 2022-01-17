@@ -1,0 +1,16 @@
+# 定义 stages（阶段）。任务将按此顺序执行。
+stages:
+  - deploy-frontend-marketing
+
+deploy-frontend-account:
+  stage: deploy-frontend-marketing
+  only:
+    - tags
+    - master
+  when: manual
+  script:
+    - cd /root/testsource/drumbeat.centralizer.frontend.marketing/scripts/docker
+    - git checkout .
+    - git pull
+    - chmod +x publish.sh
+    - ./publish.sh
