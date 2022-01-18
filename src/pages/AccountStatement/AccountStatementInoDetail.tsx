@@ -13,13 +13,18 @@ import { sleep } from 'antd-mobile/es/utils/sleep';
 import CustomNavBar from '@/components/CustomNavBar';
 import { drumbeat } from '@drbt/android-h5-sdk';
 import styles from './index.less';
-import { getTimestampFun, MonyInIt, formateDateymd } from '@/utils/common';
+import {
+  getTimestampFun,
+  MonyInIt,
+  formateDateymd,
+  accAdd,
+} from '@/utils/common';
 import moment from 'moment';
 
 const AgentSaleByArea: React.FC = () => {
   const location: any = useLocation();
-  const query_obj = location.query.queryParams
-    ? JSON.parse(location.query.queryParams)
+  const query_obj = location.query.urlparams
+    ? JSON.parse(location.query.urlparams)
     : '';
   const [filterData, setFilterData] = useState<any>();
   const [loading, setLoading] = useState<boolean>(false);
@@ -69,7 +74,7 @@ const AgentSaleByArea: React.FC = () => {
           },
         },
         {
-          code: 'ExcludeDiscountMoney',
+          code: 'DiscountMoney',
           name: '折扣',
           width: 100,
           align: 'center',
@@ -186,7 +191,7 @@ const AgentSaleByArea: React.FC = () => {
         resData.Detail.forEach(
           (element: { Amount: number; ReceiveMoney: number }) => {
             anumber = anumber + 1;
-            monny = monny + element.ReceiveMoney;
+            monny = accAdd(monny, element.ReceiveMoney);
           },
         );
         resData.Main.AmountAll = anumber;
@@ -197,7 +202,7 @@ const AgentSaleByArea: React.FC = () => {
         resData.Detail.forEach(
           (element: { Amount: number; SellMoney: number }) => {
             anumber = anumber + element.Amount;
-            monny = monny + element.SellMoney;
+            monny = accAdd(monny, element.SellMoney);
           },
         );
         resData.Main.AmountAll = anumber;
@@ -222,6 +227,35 @@ const AgentSaleByArea: React.FC = () => {
       history.goBack();
     }
   };
+  // switch (BillType) {
+  //   case 0:
+  //     value = '销售收款单'
+  //     break
+  //   case 1:
+  //     value = '直接销售出库'
+  //     break
+  //   case 2:
+  //     value = '直接销售退'
+  //     break
+  //   case 3:
+  //     value = '客户期初单'
+  //     break
+  //   case 4:
+  //     value = '折扣补差单'
+  //     break
+  //   case 5:
+  //     value = '销售出库'
+  //     break
+  //   case 6:
+  //     value = '销售退货'
+  //     break
+  //  case 7:
+  //     value = '消费链订单'
+  //     break
+  //   case 8:
+  //     value = '代销结算单'
+  //     break
+  // }
   // 单据类型
   const stateType = (state: any) => {
     let val = '';
@@ -377,7 +411,7 @@ const AgentSaleByArea: React.FC = () => {
 export default (props: any) => {
   return (
     <KeepAlive
-      id={props.location.query.queryParams || props.location.pathname}
+      id={props.location.query.urlparams || props.location.pathname}
       when={() => {
         if (props.history.action == 'POP') {
           return false;

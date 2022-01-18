@@ -13,8 +13,8 @@ import moment from 'moment';
 
 const AgentSaleByArea: React.FC = () => {
   const location: any = useLocation();
-  const query_obj = location.query.queryParams
-    ? JSON.parse(location.query.queryParams)
+  const query_obj = location.query.urlparams
+    ? JSON.parse(location.query.urlparams)
     : '';
   const [filterData, setFilterData] = useState<any>();
   const [loading, setLoading] = useState<boolean>(false);
@@ -121,7 +121,7 @@ const AgentSaleByArea: React.FC = () => {
   // 行点击
   const jumpFun = (row: any) => {
     if (row) {
-      let queryParams: any;
+      let urlparams: any;
       //  出库
       if (
         row.BillType === 5 ||
@@ -129,25 +129,25 @@ const AgentSaleByArea: React.FC = () => {
         row.BillType === 7 ||
         row.BillType === 3
       ) {
-        queryParams = JSON.stringify({
+        urlparams = JSON.stringify({
           OutId: row.BillId,
         });
       } else if (row.BillType === 0) {
         // 收款单
-        queryParams = JSON.stringify({
+        urlparams = JSON.stringify({
           ReceiveId: row.BillId,
           CompanyId: query_obj.CompanyId,
         });
       } else if (row.BillType === 4) {
         // 补差单
-        queryParams = JSON.stringify({
+        urlparams = JSON.stringify({
           companyId: query_obj.CompanyId,
           customerId: query_obj.CustomerId,
           DiscountId: row.BillId,
         });
       } else if (row.BillType === 2 || row.BillType === 6) {
         // 直接销售退
-        queryParams = JSON.stringify({
+        urlparams = JSON.stringify({
           OutId: row.BillId,
         });
       } else {
@@ -160,7 +160,7 @@ const AgentSaleByArea: React.FC = () => {
       history.push({
         pathname: '/accountDetail',
         query: {
-          queryParams,
+          urlparams,
           BillType: row.BillType,
           v: getTimestampFun(),
         },
@@ -197,6 +197,35 @@ const AgentSaleByArea: React.FC = () => {
     }
     return typeValue;
   };
+  // switch (BillType) {
+  //   case 0:
+  //     value = '销售收款单'
+  //     break
+  //   case 1:
+  //     value = '直接销售出库'
+  //     break
+  //   case 2:
+  //     value = '直接销售退'
+  //     break
+  //   case 3:
+  //     value = '客户期初单'
+  //     break
+  //   case 4:
+  //     value = '折扣补差单'
+  //     break
+  //   case 5:
+  //     value = '销售出库'
+  //     break
+  //   case 6:
+  //     value = '销售退货'
+  //     break
+  //  case 7:
+  //     value = '消费链订单'
+  //     break
+  //   case 8:
+  //     value = '代销结算单'
+  //     break
+  // }
   // 单据类型
   const stateType = (state: any) => {
     let val = '';
@@ -311,7 +340,7 @@ const AgentSaleByArea: React.FC = () => {
 export default (props: any) => {
   return (
     <KeepAlive
-      id={props.location.query.queryParams || props.location.pathname}
+      id={props.location.query.urlparams || props.location.pathname}
       when={() => {
         if (props.history.action == 'POP') {
           return false;

@@ -43,7 +43,7 @@ const AgentSaleByArea: React.FC = () => {
   };
   // 点击
   const jumpFun = (row: any) => {
-    let queryParams = JSON.stringify({
+    let urlparams = JSON.stringify({
       CompanyId: row.CompanyId,
       CustomerId: row.CustomerId,
       ReconciliationId: row.ReconciliationId,
@@ -53,7 +53,7 @@ const AgentSaleByArea: React.FC = () => {
       history.push({
         pathname: '/accountStatementIno',
         query: {
-          queryParams,
+          urlparams,
           v: getTimestampFun(),
         },
       });
@@ -172,7 +172,7 @@ const AgentSaleByArea: React.FC = () => {
 export default (props: any) => {
   return (
     <KeepAlive
-      id={props.location.query.queryParams || props.location.pathname}
+      id={props.location.query.urlparams || props.location.pathname}
       when={() => {
         if (props.history.action == 'POP') {
           return false;
