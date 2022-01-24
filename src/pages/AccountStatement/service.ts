@@ -2,7 +2,7 @@
  * @Author: li
  * @Date: 2022-01-13 15:47:16
  * @LastEditors: li
- * @LastEditTime: 2022-01-14 09:29:40
+ * @LastEditTime: 2022-01-20 14:23:14
  * @Description:
  */
 import request from '@/utils/request';
@@ -55,6 +55,14 @@ export async function getdiscountinfo(params: any) {
 //  退货单
 export async function getsaleoutinfo1(params: any) {
   return request(`billapi/saleout/getsaleoutinfo`, {
+    method: 'get',
+    params,
+  });
+}
+
+//  CSC店铺数据加密后的token转化为供应链CompanyId和CustomerId
+export async function convertcsctoken(params: any) {
+  return request(`callback/cscconfig/convertcsctoken`, {
     method: 'get',
     params,
   });

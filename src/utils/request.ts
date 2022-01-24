@@ -75,12 +75,16 @@ const request = extend({
 
 // request拦截器, 改变url 或 options.
 request.interceptors.request.use((url: any, options: any) => {
-  const token = getToken();
+  let token: string = getToken();
+  // if(options.url === 'callback/cscconfig/convertcsctoken'){
+  //   token =''
+  // }else{
+  //   token = getToken();
+  // }
   const headers = {
     'Content-Type': 'application/json',
     Accept: 'application/json',
-    Authorization:
-      'eyJUeXBlIjowLCJFbmNyeXB0TW9kZSI6MCwiVGltZVN0YW1wIjoiMjAyMi0wMS0xOCAxMToyNTowMiJ9.IntcIlVzZXJJZFwiOlwiYTU3NzFjZjAyMjE5NDExNDkxMjllYWE4NzFhZGUxMGRcIixcIkZ1bGxOYW1lXCI6XCLlr7notKYx5Y+3XCIsXCJSb2xlSWRcIjpcImExY2YwY2ZhNDNlYTRhYjRiMGQyZmFiMWFhMDkxYzZmXCIsXCJTeXNGbGFnXCI6bnVsbH0i.fLqOfTkbNhXRM5PJDVvLa9E8S7hMFNKoezSsePDdNik=',
+    Authorization: token,
   };
   return {
     url,

@@ -277,7 +277,7 @@ const AgentSaleByArea: React.FC = () => {
         }}
       >
         <div>
-          <CustomNavBar
+          {/* <CustomNavBar
             title={location.query.title || '对账单详情'}
             onBack={navBack}
             backArrow={
@@ -288,7 +288,7 @@ const AgentSaleByArea: React.FC = () => {
               )
             }
             backTop={backToArea}
-          />
+          /> */}
           <div className={styles.accInfoBoxMainInfo}>
             <div className={styles.accInfoBoxbottom}>
               <p
@@ -301,7 +301,7 @@ const AgentSaleByArea: React.FC = () => {
                 className={styles.accInfoBoxbottomRight}
                 style={{ color: '#c15816', fontWeight: 'bold' }}
               >
-                {stateValue(main.State)}
+                {/* {stateValue(main.State)} */}
               </p>
             </div>
             <div className={styles.accInfoBoxbottom}>

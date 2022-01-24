@@ -18,6 +18,7 @@ import {
   MonyInIt,
   formateDateymd,
   accAdd,
+  accSub,
 } from '@/utils/common';
 import moment from 'moment';
 
@@ -198,15 +199,28 @@ const AgentSaleByArea: React.FC = () => {
         resData.Main.MoneyAll = monny;
       } else {
         let anumber: number = 0,
-          monny: number = 0;
+          monny: number = 0,
+          discountMoney: number = 0;
         resData.Detail.forEach(
-          (element: { Amount: number; SellMoney: number }) => {
+          (element: {
+            Amount: number;
+            SellMoney: number;
+            DiscountMoney: number;
+          }) => {
             anumber = anumber + element.Amount;
             monny = accAdd(monny, element.SellMoney);
+            discountMoney = accAdd(discountMoney, element.DiscountMoney);
           },
         );
         resData.Main.AmountAll = anumber;
         resData.Main.MoneyAll = monny;
+        // 折扣金额
+        resData.Main.DiscountMoney = discountMoney;
+        // 合计金额
+        resData.Main.hejiMOny = accSub(
+          resData.Main.MoneyAll,
+          resData.Main.DiscountMoney,
+        );
       }
       setMain(resData.Main ? resData.Main : {});
     } else {
@@ -307,7 +321,7 @@ const AgentSaleByArea: React.FC = () => {
         }}
       >
         <div>
-          <CustomNavBar
+          {/* <CustomNavBar
             title={location.query.title || '交易详情'}
             onBack={navBack}
             backArrow={
@@ -318,7 +332,7 @@ const AgentSaleByArea: React.FC = () => {
               )
             }
             backTop={backToArea}
-          />
+          /> */}
           <div className={styles.accInfoBoxMainInfo}>
             <div className={styles.accInfoBoxImg}>
               <Image
@@ -374,7 +388,7 @@ const AgentSaleByArea: React.FC = () => {
                 <div className={styles.accInfoBoxbottom}>
                   <p className={styles.accInfoBoxbottomLeft}>合计金额</p>
                   <p className={styles.accInfoBoxbottomRight}>
-                    {MonyInIt(main.MoneyAll)}
+                    {MonyInIt(main.hejiMOny)}
                   </p>
                 </div>
               </>

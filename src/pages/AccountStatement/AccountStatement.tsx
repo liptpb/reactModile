@@ -1,45 +1,65 @@
 import React, { useState, useEffect } from 'react';
 import { history, useLocation, KeepAlive } from 'umi';
 import { LeftOutline, CloseOutline } from 'antd-mobile-icons';
-import { getsinglecustomerrecon, getreconciliation } from './service';
+import {
+  getsinglecustomerrecon,
+  getreconciliation,
+  convertcsctoken,
+} from './service';
 import { PullToRefresh, Empty } from 'antd-mobile';
 import { sleep } from 'antd-mobile/es/utils/sleep';
 import CustomNavBar from '@/components/CustomNavBar';
 import { drumbeat } from '@drbt/android-h5-sdk';
 import styles from './index.less';
 import { getTimestampFun, MonyInIt } from '@/utils/common';
+import { getToken, clearAuthority } from '@/utils/authority';
 
 const AgentSaleByArea: React.FC = () => {
   const location: any = useLocation();
   const [loading, setLoading] = useState<boolean>(false);
   const [dataSource, setDataSource] = useState<any[]>([]);
   const [topClose, setTopClose] = useState<boolean>(false); // 导航栏关闭按钮
+  const [convert, setConvert] = useState<{ Item1: string; Item2: string }>();
 
-  // 区域层级查询
-  const queryAreaDataFun = async () => {
-    setLoading(true);
-    const res = await getreconciliation({
-      // "CompanyId": "20cce64032064b8d99de2b6d58b3a754",
-      // "CustomerId": "ff317f1f826645a8a05c879b68764d85"
-      CompanyId: 'aed76cfd04514f6893681cb08f3d44e4',
-      CustomerId: '514149c185cf43389ea4a5b67ba356da',
+  const convertCSCTokenFN = async () => {
+    const token = getToken();
+    const res = await convertcsctoken({
+      token: token,
     });
-    setLoading(false);
     if (res.StatusCode === 200 && res.Entity) {
       let resData = JSON.parse(res.Entity);
-      resData.forEach((element: any) => {
-        // element.CompanyId = "20cce64032064b8d99de2b6d58b3a754"
-        element.CompanyId = 'aed76cfd04514f6893681cb08f3d44e4';
-        // element.CustomerId = "ff317f1f826645a8a05c879b68764d85"
-      });
-      setDataSource(resData);
+      queryAreaDataFun(resData);
+      setConvert({ ...resData });
+    }
+  };
+  //
+  const queryAreaDataFun = async (convert1: {
+    Item1: string;
+    Item2: string;
+  }) => {
+    setLoading(true);
+    console.log(convert1);
+    const res = await getreconciliation({
+      CompanyId: convert1?.Item1 || '',
+      CustomerId: convert1?.Item2 || '',
+    });
+    setLoading(false);
+    if (res.StatusCode === 200) {
+      if (res.Entity) {
+        let resData = JSON.parse(res.Entity);
+        resData.forEach((element: any) => {
+          element.CustomerId = convert1?.Item2 || '';
+        });
+        setDataSource(resData);
+      } else {
+        setDataSource([]);
+      }
     } else {
-      setDataSource([]);
     }
   };
   // 下拉刷新
   const refreshFun = () => {
-    queryAreaDataFun();
+    queryAreaDataFun(convert);
   };
   // 点击
   const jumpFun = (row: any) => {
@@ -94,9 +114,15 @@ const AgentSaleByArea: React.FC = () => {
     }
     return typeValue;
   };
+
   useEffect(() => {
-    queryAreaDataFun();
+    convertCSCTokenFN();
   }, []);
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     queryAreaDataFun()
+  //   }, 2000);
+  // },[])
   return (
     <KeepAlive>
       <PullToRefresh
@@ -106,7 +132,7 @@ const AgentSaleByArea: React.FC = () => {
         }}
       >
         <div>
-          <CustomNavBar
+          {/* <CustomNavBar
             title={location.query.title || '对账单'}
             subTitle={''}
             onBack={navBack}
@@ -118,7 +144,7 @@ const AgentSaleByArea: React.FC = () => {
               )
             }
             backTop={backToArea}
-          />
+          /> */}
           {/* 数据表 */}
           {dataSource &&
             dataSource.map((item, index) => {
@@ -130,7 +156,7 @@ const AgentSaleByArea: React.FC = () => {
                         {item.IntervalName}
                       </p>
                       <p className={styles.accInfoBoxTopRight}>
-                        {stateValue(item.State)}
+                        {/* {stateValue(item.State)} */}
                       </p>
                     </div>
                     <div className={styles.accInfoBoxbottom}>

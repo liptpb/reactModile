@@ -1,5 +1,5 @@
 window.globalConfig = {
-  baseapi: 'http://open.drumbeatsoft.com:8887/',
+  baseapi: 'https://open.drumbeatsoft.com:10002/',
   // baseapi: 'http://192.168.70.203:8887/',
   middleapi: {
     scaccountapi: 'scaccountapi',
